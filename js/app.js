@@ -26,6 +26,8 @@ function shuffle(array) {
 }
 
 
+
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -36,3 +38,77 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+let openCards = [];
+let moveCounter = 0;
+
+function displayCardSymbol(card) {
+    card.classList.add('open', 'show');
+}
+
+function addCardToList(card) {
+    openCards.push(card);
+}
+
+function checkCardsMatch() {
+    if (openCards[0].innerHTML === openCards[1].innerHTML) {
+        lockCards();
+    } else {
+        hideCards();
+    }
+}
+
+function lockCards() {
+    openCards.forEach(card => card.classList.add('match'));
+    openCards = [];
+}
+
+function hideCards() {
+    setTimeout(() => {
+        openCards.forEach(card => card.classList.remove('open', 'show'));
+        openCards = [];
+    }, 1000);
+}
+
+function incrementMoveCounter() {
+    moveCounter++;
+    document.querySelector('.moves').innerText = moveCounter;
+}
+
+function checkAllCardsMatched() {
+    const cards = document.querySelectorAll('.card');
+    if (Array.from(cards).every(card => card.classList.contains('match'))) {
+        displayFinalScore();
+    }
+}
+
+function displayFinalScore() {
+    // Display final score
+}
+
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', function() {
+        displayCardSymbol(card);
+        addCardToList(card);
+        if (openCards.length === 2) {
+            checkCardsMatch();
+            incrementMoveCounter();
+            checkAllCardsMatched();
+        }
+    });
+});
+
+document.querySelector('#repeatButton').addEventListener('click', resetGame);
+
+function resetGame() {
+    openCards = [];
+    moveCounter = 0;
+    document.querySelector('.moves').innerText = moveCounter;
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        card.classList.remove('open', 'show', 'match');
+    });
+    // Reset score display
+    document.querySelector('.score').innerText = '';
+}
+
