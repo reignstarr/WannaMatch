@@ -17,8 +17,11 @@ body {
 }
 
 body {
-    background: #ffffff url('../img/geometry2.png'); /* Background pattern from Subtle Patterns */
-    font-family: 'Coda', cursive;
+    font-family: 'Comic Neue', cursive;
+    color: #ffffff;
+    background-image: url('../images/Background/reignScratches.jpeg');
+    background-size: cover;
+    background-repeat: repeat;
 }
 
 .container {
@@ -26,11 +29,6 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-}
-
-h1 {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
 }
 
 /*
@@ -79,6 +77,18 @@ h1 {
     cursor: default;
     background: #02ccba;
     font-size: 33px;
+}
+
+.card {
+    width: 100px; /* adjust as needed */
+    height: 150px; /* adjust as needed */
+    overflow: hidden; /* hide any content that exceeds the box size */
+}
+
+.card img {
+    width: auto; /* use the original image width */
+    height: auto; /* use the original image height */
+    object-fit: contain; /* scale the image as large as possible within the card box, without cropping or stretching the image */
 }
 
 /*

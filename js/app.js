@@ -36,11 +36,18 @@ shuffledCards.forEach(card => {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
+
 let openCards = [];
 let moveCounter = 0;
 
 function displayCardSymbol(card) {
+    card.querySelector('img').src = card.dataset.cardImage; // display the front of the card
     card.classList.add('open', 'show');
+}
+
+function hideCardSymbol(card) {
+    card.querySelector('img').src = 'images/back_of_card.webp'; // display the back of the card
+    card.classList.remove('open', 'show');
 }
 
 function addCardToList(card) {
@@ -48,110 +55,80 @@ function addCardToList(card) {
 }
 
 function checkCardsMatch() {
-    if (openCards[0].innerHTML === openCards[1].innerHTML) {
-        lockCards();
+    if (openCards.length < 2) {
+        return;
+    }
+
+    const [card1, card2] = openCards;
+    if (card1.querySelector('img').src === card2.querySelector('img').src) {
+        lockCardsInOpenPosition(card1, card2);
     } else {
-        hideCards();
+        removeCardsFromListAndHideSymbol(card1, card2);
     }
 }
 
-
-function lockCards() {
-    openCards.forEach(card => card.classList.add('match'));
+function lockCardsInOpenPosition(card1, card2) {
+    card1.classList.add('match');
+    card2.classList.add('match');
     openCards = [];
 }
 
-function hideCards() {
+function removeCardsFromListAndHideSymbol(card1, card2) {
     setTimeout(() => {
-        openCards.forEach(card => card.classList.remove('open', 'show'));
+        hideCardSymbol(card1);
+        hideCardSymbol(card2);
         openCards = [];
     }, 1000);
 }
 
-function incrementMoveCounter() {
+function incrementMoveCounterAndDisplay() {
     moveCounter++;
-    document.querySelector('.moves').innerText = moveCounter;
+    document.querySelector('.moves').textContent = moveCounter;
 }
 
 function checkAllCardsMatched() {
-    const cards = document.querySelectorAll('.card');
-    if (Array.from(cards).every(card => card.classList.contains('match'))) {
-        displayFinalScore();
+    const allCards = Array.from(document.querySelectorAll('.card'));
+    if (allCards.every(card => card.classList.contains('match'))) {
+        alert(`Congratulations! You've matched all cards in ${moveCounter} moves.`);
     }
-}
-
-function displayFinalScore() {
-    // Display final score
 }
 
 document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', function() {
+    card.addEventListener('click', () => {
+        if (card.classList.contains('open') || card.classList.contains('match')) {
+            return; // ignore clicks on cards that are already open or matched
+        }
+
         displayCardSymbol(card);
         addCardToList(card);
-        if (openCards.length === 2) {
-            checkCardsMatch();
-            incrementMoveCounter();
-            checkAllCardsMatched();
-        }
+        checkCardsMatch();
+        incrementMoveCounterAndDisplay();
+        checkAllCardsMatched();
     });
 });
 
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-document.querySelector('#repeatButton').addEventListener('click', resetGame);
-
 function resetGame() {
-    openCards = [];
+    // Reset move counter
     moveCounter = 0;
-    document.querySelector('.moves').innerText = moveCounter;
+    document.querySelector('.moves').textContent = moveCounter;
+
+    // Clear the openCards array
+    openCards = [];
+
+    // Remove all classes from the cards
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
-        card.classList.remove('open', 'show', 'match');
-        card.style.backgroundColor = getRandomColor(); // Set random color to each card
+        card.className = 'card';
     });
-    // Reset score display
-    document.querySelector('.score').innerText = '';
 
-    // Set random color to the board
-    document.querySelector('.deck').style.backgroundColor = getRandomColor();
-}
-
-function addCardToList(card) {
-    if (!openCards.includes(card)) {
-        openCards.push(card);
-    }
-}
-
-// Disable click event on all cards
-function disableClick() {
-    document.querySelectorAll('.card').forEach(card => {
-        card.style.pointerEvents = 'none';
+    // Shuffle and display the cards
+    const shuffledCards = shuffle(Array.from(cards));
+    const deck = document.querySelector('.deck');
+    deck.innerHTML = ''; // Clear the deck
+    shuffledCards.forEach(card => {
+        deck.appendChild(card);
     });
 }
 
-// Enable click event on all unmatched cards
-function enableClick() {
-    document.querySelectorAll('.card:not(.match)').forEach(card => {
-        card.style.pointerEvents = '';
-    });
-}
-
-// Modify the checkCardsMatch function
-function checkCardsMatch() {
-    disableClick();
-    if (openCards[0].innerHTML === openCards[1].innerHTML) {
-        lockCards();
-    } else {
-        hideCards();
-    }
-    setTimeout(enableClick, 1000); // Enable click after 1 second
-}
-
-
+// Attach the reset function to the click event of the repeatButton
+document.querySelector('#repeatButton').addEventListener('click', resetGame);
