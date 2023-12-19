@@ -1,16 +1,3 @@
-/*
- * Create a list that holds all of your cards
- */
-
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-// Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -24,6 +11,16 @@ function shuffle(array) {
 
     return array;
 }
+
+// Shuffle the list of cards
+const cards = document.querySelectorAll('.card');
+const shuffledCards = shuffle(Array.from(cards));
+
+// Display the shuffled cards on the page
+const deck = document.querySelector('.deck');
+shuffledCards.forEach(card => {
+    deck.appendChild(card);
+});
 
 
 
@@ -57,6 +54,7 @@ function checkCardsMatch() {
         hideCards();
     }
 }
+
 
 function lockCards() {
     openCards.forEach(card => card.classList.add('match'));
@@ -98,6 +96,15 @@ document.querySelectorAll('.card').forEach(card => {
     });
 });
 
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 document.querySelector('#repeatButton').addEventListener('click', resetGame);
 
 function resetGame() {
@@ -107,8 +114,44 @@ function resetGame() {
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
         card.classList.remove('open', 'show', 'match');
+        card.style.backgroundColor = getRandomColor(); // Set random color to each card
     });
     // Reset score display
     document.querySelector('.score').innerText = '';
+
+    // Set random color to the board
+    document.querySelector('.deck').style.backgroundColor = getRandomColor();
 }
+
+function addCardToList(card) {
+    if (!openCards.includes(card)) {
+        openCards.push(card);
+    }
+}
+
+// Disable click event on all cards
+function disableClick() {
+    document.querySelectorAll('.card').forEach(card => {
+        card.style.pointerEvents = 'none';
+    });
+}
+
+// Enable click event on all unmatched cards
+function enableClick() {
+    document.querySelectorAll('.card:not(.match)').forEach(card => {
+        card.style.pointerEvents = '';
+    });
+}
+
+// Modify the checkCardsMatch function
+function checkCardsMatch() {
+    disableClick();
+    if (openCards[0].innerHTML === openCards[1].innerHTML) {
+        lockCards();
+    } else {
+        hideCards();
+    }
+    setTimeout(enableClick, 1000); // Enable click after 1 second
+}
+
 
