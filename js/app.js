@@ -95,8 +95,8 @@ function checkAllCardsMatched() {
 
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
-        if (card.classList.contains('open') || card.classList.contains('match')) {
-            return; // ignore clicks on cards that are already open or matched
+        if (card.classList.contains('open') || card.classList.contains('match') || openCards.length >= 2) {
+            return; // ignore clicks on cards that are already open, matched, or if there are already two cards in the openCards array
         }
 
         displayCardSymbol(card);
@@ -115,10 +115,12 @@ function resetGame() {
     // Clear the openCards array
     openCards = [];
 
-    // Remove all classes from the cards
+    // Remove all classes from the cards that make them visible and reset their image
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
-        card.className = 'card';
+        card.classList.remove('open', 'show', 'match'); // Remove 'open', 'show', and 'match' classes
+        const img = card.querySelector('img');
+        img.src = 'images/back_of_card.webp'; // Reset the image
     });
 
     // Shuffle and display the cards
