@@ -1,5 +1,6 @@
 # Wanna Match?
-This is a matching game I made based off of Udacity's Memory Starter Project. I forked it and added my images/art, funtionality and made it more my own. Basically just click the two pictures that match and do it until you match them all! Click the reset button at the top if you want to restart (it will shuffle the cards). Each card you click will add on to the move counter. I hope you enjoy!
+
+This is a matching game I created based on Udacity's Memory Starter Project. I forked it, added my own images/art, enhanced the functionality, and personalized it. Simply click on two matching pictures until all are matched! To restart and shuffle the cards, click the reset button at the top. Each card you click will increment the move counter. Enjoy!
 
 # Resources Used
 
