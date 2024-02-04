@@ -167,10 +167,7 @@ header {
 /* Header WannaMatch? Title */
 .match-title {
     /* BEGIN: Resetting main header styles */
-    top: initial;
-    background-color: initial;
-    overflow-x: initial;
-    transition: initial;
+    background-color: transparent;
     /* END: Resetting main header styles */
 }
 
