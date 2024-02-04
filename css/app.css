@@ -164,6 +164,17 @@ header {
     flex-direction: column;
 }
 
+/* Header WannaMatch? Title */
+.match-title {
+    /* BEGIN: Resetting main header styles */
+    top: initial;
+    background-color: initial;
+    overflow-x: initial;
+    transition: initial;
+    /* END: Resetting main header styles */
+}
+
+
 /*
  * Styles for the deck of cards
  */
